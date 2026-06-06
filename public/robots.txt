@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://kalbim.org/sitemap.xml
