@@ -61,8 +61,10 @@ export function Header() {
               Giriş
             </a>
             <a
-              href="#uye-ol"
-              className="rounded-full bg-ink px-5 py-2.5 text-[0.9rem] font-semibold text-cream transition-all hover:-translate-y-0.5 hover:bg-ink-soft"
+              href="https://forms.gle/TL8eCoPouaDQsx2C7"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full bg-crimson-500 px-5 py-2.5 text-[0.9rem] font-semibold text-cream transition-all hover:-translate-y-0.5 hover:bg-ink-soft"
             >
               Üye Ol
             </a>
@@ -133,7 +135,9 @@ export function Header() {
               Giriş
             </a>
             <a
-              href="#uye-ol"
+              href="https://forms.gle/TL8eCoPouaDQsx2C7"
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setOpen(false)}
               className="rounded-full bg-ink px-5 py-3 text-center font-semibold text-cream"
             >

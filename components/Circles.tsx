@@ -6,10 +6,10 @@ import { circles, type CircleTheme } from '@/lib/content';
 import { cn } from '@/lib/utils';
 
 const dotColors: Record<CircleTheme, string> = {
-  crimson: '#B83A52',
-  forest: '#4C7A5D',
-  gold: '#D4A849',
-  lilac: '#B6A4E0',
+  crimson: '#92298E',
+  forest: '#BE8FC0',
+  gold: '#A7A5A7',
+  lilac: '#CDB0CE',
 };
 
 function RingMarker({ theme }: { theme: CircleTheme }) {
@@ -53,11 +53,11 @@ export function Circles() {
               başlatabilirsiniz.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button href="#topluluk" variant="primary" size="md">
+              <Button href="/topluluk" variant="primary" size="md">
                 Çevre Bul
                 <ArrowRight className="h-4 w-4" />
               </Button>
-              <Button href="#topluluk" variant="outline-dark" size="md">
+              <Button href="/topluluk" variant="outline-dark" size="md">
                 Çevre Kur
               </Button>
             </div>

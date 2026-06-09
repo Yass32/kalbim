@@ -4,9 +4,9 @@ import { InstagramIcon, LinkedInIcon, XIcon } from '@/components/icons';
 import { footerColumns, footerLegal } from '@/lib/content';
 
 const socials = [
-  { label: 'Instagram', Icon: InstagramIcon, bg: 'bg-crimson', href: '#' },
-  { label: 'LinkedIn', Icon: LinkedInIcon, bg: 'bg-ink', href: '#' },
-  { label: 'X', Icon: XIcon, bg: 'bg-forest', href: '#' },
+  { label: 'Instagram', Icon: InstagramIcon, bg: 'bg-crimson', href: 'https://www.instagram.com/kalbimkadinliderligi/' },
+  { label: 'LinkedIn', Icon: LinkedInIcon, bg: 'bg-ink', href: 'https://www.linkedin.com/company/kalbimkadinliderligivebilinclendirmemerkezi/' },
+  { label: 'X', Icon: XIcon, bg: 'bg-forest', href: '' },
 ];
 
 export function Footer() {
@@ -40,7 +40,7 @@ export function Footer() {
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
             {footerColumns.map((col) => (
               <nav key={col.title} aria-label={col.title}>
-                <h3 className="text-[0.72rem] font-bold uppercase tracking-[0.14em] text-ink/55">
+                <h3 className="text-[0.72rem] font-bold uppercase tracking-[0.14em] text-crimson-500">
                   {col.title}
                 </h3>
                 <ul className="mt-4 space-y-3">

@@ -31,7 +31,7 @@ export function CTA() {
 
                 <a
                   href="#uye-ol"
-                  className="relative z-10 inline-flex items-center justify-center rounded-full bg-ink px-8 py-4 text-base font-semibold text-cream shadow-[0_16px_40px_-18px_rgba(28,16,36,0.6)] transition-transform hover:-translate-y-0.5"
+                  className="relative z-10 inline-flex items-center justify-center rounded-full bg-forest-500 px-8 py-4 text-base font-semibold text-cream shadow-[0_16px_40px_-18px_rgba(81,81,82,0.6)] transition-transform hover:-translate-y-0.5"
                 >
                   Üye Ol — Ücretsiz
                 </a>

@@ -7,9 +7,9 @@ import { articles } from '@/lib/content';
 function CirclesArt() {
   return (
     <svg viewBox="0 0 300 150" className="h-full w-full" aria-hidden="true">
-      <circle cx="118" cy="75" r="48" fill="#4C7A5D" />
-      <circle cx="182" cy="75" r="48" fill="#D4A849" />
-      <circle cx="150" cy="75" r="33" fill="#B83A52" />
+      <circle cx="118" cy="75" r="48" fill="#BE8FC0" />
+      <circle cx="182" cy="75" r="48" fill="#A7A5A7" />
+      <circle cx="150" cy="75" r="33" fill="#92298E" />
     </svg>
   );
 }
@@ -17,9 +17,9 @@ function CirclesArt() {
 function SquaresArt() {
   return (
     <svg viewBox="0 0 300 150" className="h-full w-full" aria-hidden="true">
-      <rect x="96" y="46" width="40" height="58" rx="8" fill="#B6A4E0" />
-      <rect x="142" y="46" width="40" height="58" rx="8" fill="#F2A07E" />
-      <rect x="188" y="46" width="40" height="58" rx="8" fill="#B83A52" />
+      <rect x="96" y="46" width="40" height="58" rx="8" fill="#CDB0CE" />
+      <rect x="142" y="46" width="40" height="58" rx="8" fill="#BE8FC0" />
+      <rect x="188" y="46" width="40" height="58" rx="8" fill="#92298E" />
     </svg>
   );
 }
@@ -36,7 +36,7 @@ export function Blog() {
             </h2>
           </Reveal>
           <Reveal delay={120}>
-            <Button href="#blog" variant="outline-dark" size="md">
+            <Button href="/blog" variant="outline-dark" size="md">
               Tüm yazılar
               <ArrowRight className="h-4 w-4" />
             </Button>
@@ -67,8 +67,8 @@ export function Blog() {
                   <span>· Türkçe</span>
                 </p>
                 <a
-                  href="#blog"
-                  className="inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-[0.88rem] font-semibold text-cream transition-transform hover:-translate-y-0.5"
+                  href="/blog"
+                  className="inline-flex items-center gap-2 rounded-full bg-crimson px-5 py-2.5 text-[0.88rem] font-semibold text-cream transition-transform hover:-translate-y-0.5"
                 >
                   İndir
                   <ArrowRight className="h-4 w-4" />
@@ -82,7 +82,7 @@ export function Blog() {
             {articles.map((article, i) => (
               <Reveal as="article" key={article.title} delay={i * 110}>
                 <a
-                  href="#blog"
+                  href="/blog"
                   className="group flex h-full flex-col overflow-hidden rounded-[1.5rem] bg-cream ring-1 ring-ink/[0.05] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_48px_-30px_rgba(28,16,36,0.4)]"
                 >
                   <div className="aspect-[2/1] bg-cream-100 p-4">

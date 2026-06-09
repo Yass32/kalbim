@@ -9,45 +9,50 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Warm cream backgrounds
+        // Backgrounds: white + light gray-lavender bands
         cream: {
-          DEFAULT: '#FEFAEF',
-          50: '#FEFAEF',
-          100: '#FBF5E9',
-          200: '#F6F0E0',
-          300: '#EFE7D4',
+          DEFAULT: '#FEFEFE',
+          50: '#FEFEFE',
+          100: '#F7F5F8',
+          200: '#EEECEF',
+          300: '#E4E1E6',
         },
-        // Dark plum (text + dark buttons)
+        // Dark grey (headings, body strong, live badge)
         ink: {
-          DEFAULT: '#1C1024',
-          soft: '#2A1B33',
+          DEFAULT: '#515152',
+          soft: '#3F3F40',
         },
-        // Primary crimson / rose
+        // Primary — neon pink / magenta
         crimson: {
-          DEFAULT: '#B83A52',
-          500: '#B83A52',
-          600: '#A8334A',
-          card: '#BE4257',
+          DEFAULT: '#92298E',
+          500: '#92298E',
+          600: '#7D2279',
+          card: '#92298E',
         },
+        // Secondary — matte lavender
         forest: {
-          DEFAULT: '#4C7A5D',
-          500: '#4C7A5D',
-          card: '#3E6A4F',
+          DEFAULT: '#BE8FC0',
+          500: '#BE8FC0',
+          card: '#AF7FB1',
         },
+        // Tertiary — gray
         gold: {
-          DEFAULT: '#D4A849',
-          500: '#C9982E',
-          card: '#CFA13B',
-          deep: '#B39758',
+          DEFAULT: '#A7A5A7',
+          500: '#A7A5A7',
+          card: '#A7A5A7',
+          deep: '#8F8D8F',
         },
+        // Soft lavender tint (featured surfaces)
         blush: {
-          DEFAULT: '#F2B9C2',
-          deep: '#E79BAA',
+          DEFAULT: '#EAD9EC',
+          deep: '#BE8FC0',
         },
         muted: {
-          DEFAULT: '#6F6757',
-          soft: '#8C8475',
+          DEFAULT: '#A7A5A7',
+          soft: '#B9B7B9',
         },
+        // Extra light lavender accent
+        lilac: '#CDB0CE',
       },
       fontFamily: {
         sans: ['var(--font-jakarta)', 'system-ui', 'sans-serif'],
