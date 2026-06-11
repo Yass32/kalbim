@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import type { AnchorHTMLAttributes, ReactNode } from 'react';
 
@@ -5,6 +6,7 @@ type Variant = 'primary' | 'secondary' | 'ghost' | 'outline-dark';
 type Size = 'md' | 'lg' | 'sm';
 
 interface ButtonProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+  href: string;
   variant?: Variant;
   size?: Size;
   children: ReactNode;
@@ -15,12 +17,12 @@ const base =
 
 const variants: Record<Variant, string> = {
   primary:
-    'bg-crimson-500 text-cream hover:bg-ink-soft hover:-translate-y-0.5 shadow-[0_8px_24px_-12px_rgba(81,81,82,0.5)]',
+    'bg-crimson text-cream hover:bg-crimson-600 hover:-translate-y-0.5 shadow-[0_8px_24px_-12px_rgba(146,41,142,0.6)]',
   secondary:
-    'bg-transparent text-ink border border-ink/15 hover:border-ink/40 hover:bg-ink/[0.03]',
+    'bg-transparent text-ink border border-ink/20 hover:border-crimson hover:text-crimson hover:bg-crimson/[0.04]',
   ghost: 'bg-transparent text-ink hover:text-crimson',
   'outline-dark':
-    'bg-cream text-ink border border-ink/15 hover:border-ink/40 hover:bg-cream-100',
+    'bg-cream text-ink border border-ink/15 hover:border-crimson hover:text-crimson hover:bg-cream-100',
 };
 
 const sizes: Record<Size, string> = {
@@ -30,14 +32,25 @@ const sizes: Record<Size, string> = {
 };
 
 export function Button({
+  href,
   variant = 'primary',
   size = 'md',
   className,
   children,
   ...props
 }: ButtonProps) {
+  const classes = cn(base, variants[variant], sizes[size], className);
+
+  if (href.startsWith('/')) {
+    return (
+      <Link href={href} className={classes} {...props}>
+        {children}
+      </Link>
+    );
+  }
+
   return (
-    <a className={cn(base, variants[variant], sizes[size], className)} {...props}>
+    <a href={href} className={classes} {...props}>
       {children}
     </a>
   );

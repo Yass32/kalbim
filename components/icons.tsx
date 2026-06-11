@@ -11,7 +11,7 @@ export function HeartShield(props: IconProps) {
       />
       <path
         d="M12 16s-3.2-1.9-3.2-4.2A1.8 1.8 0 0 1 12 10a1.8 1.8 0 0 1 3.2 1.8C15.2 14.1 12 16 12 16Z"
-        fill="#fefefe"
+        fill="#FEFAEF"
       />
     </svg>
   );

@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from 'next';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
 // Self-hosted font (no external network at build/runtime). Includes latin-ext
 // for full Turkish glyph coverage (ç, ğ, ı, İ, ö, ş, ü).
 import '@fontsource/plus-jakarta-sans/latin-400.css';
@@ -55,9 +57,19 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#fefefe',
+  themeColor: '#FEFEFE',
   width: 'device-width',
   initialScale: 1,
+};
+
+const orgJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'KALBİM',
+  alternateName: 'Kadın Liderliği ve Bilinçlendirme Merkezi',
+  url: SITE_URL,
+  description: 'Kadınların liderlik potansiyelini destekleyen topluluk ve öğrenme merkezi.',
+  sameAs: ['https://instagram.com', 'https://linkedin.com', 'https://x.com'],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -73,8 +85,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }}
           />
         </noscript>
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+        />
       </head>
-      <body>{children}</body>
+      <body>
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-crimson focus:px-4 focus:py-2 focus:text-cream"
+        >
+          İçeriğe geç
+        </a>
+        <Header />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }

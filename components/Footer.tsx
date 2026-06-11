@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Logo } from '@/components/ui/Logo';
 import { InstagramIcon, LinkedInIcon, XIcon } from '@/components/icons';
@@ -40,18 +41,18 @@ export function Footer() {
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
             {footerColumns.map((col) => (
               <nav key={col.title} aria-label={col.title}>
-                <h3 className="text-[0.72rem] font-bold uppercase tracking-[0.14em] text-crimson-500">
+                <h3 className="text-[0.72rem] font-bold uppercase tracking-[0.14em] text-ink/55">
                   {col.title}
                 </h3>
                 <ul className="mt-4 space-y-3">
                   {col.links.map((link) => (
-                    <li key={link}>
-                      <a
-                        href="#"
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
                         className="text-[0.92rem] text-ink/75 transition-colors hover:text-crimson"
                       >
-                        {link}
-                      </a>
+                        {link.label}
+                      </Link>
                     </li>
                   ))}
                 </ul>

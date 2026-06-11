@@ -3,7 +3,7 @@ import { Reveal } from '@/components/ui/Reveal';
 
 export function CTA() {
   return (
-    <section id="iletisim" className="py-16 sm:py-20 lg:py-24">
+    <section className="py-16 sm:py-20 lg:py-24">
       <Container>
         <Reveal>
           <div className="relative overflow-hidden rounded-[2rem] bg-cream-200 px-7 py-12 ring-1 ring-ink/[0.04] sm:px-12 sm:py-16 lg:px-16">
@@ -30,8 +30,8 @@ export function CTA() {
                 </span>
 
                 <a
-                  href="#uye-ol"
-                  className="relative z-10 inline-flex items-center justify-center rounded-full bg-forest-500 px-8 py-4 text-base font-semibold text-cream shadow-[0_16px_40px_-18px_rgba(81,81,82,0.6)] transition-transform hover:-translate-y-0.5"
+                  href="/iletisim"
+                  className="relative z-10 inline-flex items-center justify-center rounded-full bg-crimson px-8 py-4 text-base font-semibold text-cream shadow-[0_16px_40px_-18px_rgba(146,41,142,0.7)] transition-transform hover:-translate-y-0.5"
                 >
                   Üye Ol — Ücretsiz
                 </a>

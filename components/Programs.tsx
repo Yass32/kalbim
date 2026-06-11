@@ -38,7 +38,7 @@ export function Programs() {
             </h2>
           </Reveal>
           <Reveal delay={120}>
-            <Button href="#programlar" variant="outline-dark" size="md">
+            <Button href="/programlar" variant="outline-dark" size="md">
               Tüm programları gör
               <ArrowRight className="h-4 w-4" />
             </Button>
@@ -85,7 +85,7 @@ export function Programs() {
                       ))}
                     </div>
                     <a
-                      href="#uye-ol"
+                      href="/iletisim"
                       className="mt-5 inline-flex items-center gap-2 font-semibold transition-transform hover:gap-3"
                     >
                       Başvur
