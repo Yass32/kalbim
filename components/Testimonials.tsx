@@ -81,7 +81,7 @@ export function Testimonials() {
               "
             >
               <QuoteMark className="h-6 w-7 text-crimson" />
-              <p className="mt-5 flex-1 text-[1rem] leading-relaxed text-ink/85 italic">"{t.quote}"</p>
+              <p className="mt-5 flex-1 text-[1rem] leading-relaxed text-ink/85 italic">&ldquo;{t.quote}&rdquo;</p>
               <div className="mt-7 flex items-center gap-3 border-t border-ink/[0.07] pt-5">
                 <span
                   className={`grid h-11 w-11 place-items-center rounded-full ${avatarBg[t.theme]} text-sm font-bold text-cream`}

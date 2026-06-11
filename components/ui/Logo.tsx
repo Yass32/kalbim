@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 import { HeartShield } from '@/components/icons';
 
 
@@ -15,7 +16,7 @@ export function Logo({ className, labelClassName }: LogoProps) {
       className={cn('inline-flex items-center gap-2.5', className)}
       aria-label="KALBİM ana sayfa"
     >
-      <img
+      <Image
           src="/kalbim_logo.png"
           alt="KALBİM Logo"
           className="h-16 object-contain"
