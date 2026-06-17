@@ -12,7 +12,7 @@
   "dependencies": {
     "@directus/sdk": "^19.1.0",
     "@fontsource/plus-jakarta-sans": "^5.2.8",
-    "next": "15.1.6",
+    "next": "15.1.11",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "server-only": "^0.0.1"
