@@ -127,7 +127,7 @@ export function Header() {
             <Link href="/iletisim" className="rounded-full border border-ink/15 px-5 py-3 text-center font-semibold text-ink">
               Giriş
             </Link>
-            <Link href="https://forms.gle/TL8eCoPouaDQsx2C7" className="rounded-full bg-crimson px-5 py-3 text-center font-semibold text-cream">
+            <Link href="/iletisim" className="rounded-full bg-crimson px-5 py-3 text-center font-semibold text-cream">
               Üye Ol
             </Link>
           </div>

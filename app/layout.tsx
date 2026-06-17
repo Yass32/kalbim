@@ -51,9 +51,6 @@ export const metadata: Metadata = {
       'Kadınların liderlik potansiyelini destekleyen topluluk ve öğrenme merkezi.',
   },
   robots: { index: true, follow: true },
-  icons: {
-    icon: '/icon.png',
-  },
 };
 
 export const viewport: Viewport = {

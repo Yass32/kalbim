@@ -5,7 +5,9 @@ import { PageHeader } from '@/components/PageHeader';
 import { CTA } from '@/components/CTA';
 import { BlogGrid } from '@/components/sections/BlogGrid';
 import { Newsletter } from '@/components/sections/Newsletter';
+import Link from 'next/link';
 import { ArrowRight } from '@/components/icons';
+import { getPosts, getCategories, toPostCard } from '@/lib/directus';
 
 export const metadata: Metadata = {
   title: 'Blog & Kaynaklar',
@@ -14,7 +16,14 @@ export const metadata: Metadata = {
   alternates: { canonical: '/blog' },
 };
 
-export default function BlogPage() {
+// Incremental Static Regeneration — content refreshes from Directus every 60s.
+export const revalidate = 60;
+
+export default async function BlogPage() {
+  const [posts, categories] = await Promise.all([getPosts(), getCategories()]);
+  const cards = posts.map(toPostCard);
+  const categoryNames = categories.map((c) => c.name);
+
   return (
     <main id="main">
       <PageHeader
@@ -23,7 +32,7 @@ export default function BlogPage() {
         description="Topluluğumuzdan ve uzman katkılarından derlenen yazılar, rehberler ve ücretsiz kaynaklar. Kariyerinin her aşamasında işine yarayacak içerikler."
       />
 
-      {/* Featured resource */}
+      {/* Featured resource (static promo) */}
       <section className="py-16 sm:py-20 lg:pb-10 lg:pt-24">
         <Container>
           <Reveal as="article">
@@ -43,13 +52,13 @@ export default function BlogPage() {
                   sayfalık ücretsiz rehber. İndir, yazdır, görüşmene hazır gel.
                 </p>
                 <div className="mt-6 flex flex-wrap items-center gap-4">
-                  <a
+                  <Link
                     href="/blog"
                     className="inline-flex items-center gap-2 rounded-full bg-crimson px-6 py-3 font-semibold text-cream transition-transform hover:-translate-y-0.5"
                   >
                     Ücretsiz indir
                     <ArrowRight className="h-4 w-4" />
-                  </a>
+                  </Link>
                   <span className="text-[0.82rem] text-ink/70">PDF · 28 sayfa · Türkçe</span>
                 </div>
               </div>
@@ -58,7 +67,7 @@ export default function BlogPage() {
         </Container>
       </section>
 
-      {/* Filterable grid */}
+      {/* Posts from Directus */}
       <section className="py-10 sm:py-12 lg:pb-24">
         <Container>
           <Reveal>
@@ -66,12 +75,11 @@ export default function BlogPage() {
             <p className="mt-2 text-muted">Bir kategori seçerek filtreleyebilirsin.</p>
           </Reveal>
           <div className="mt-8">
-            <BlogGrid />
+            <BlogGrid posts={cards} categories={categoryNames} />
           </div>
         </Container>
       </section>
 
-      {/* Newsletter */}
       <section className="pb-16 sm:pb-20 lg:pb-24">
         <Container>
           <Reveal>

@@ -129,22 +129,6 @@ export const testimonials: Testimonial[] = [
     initials: 'MD',
     theme: 'gold',
   },
-  {
-    quote:
-      "Kariyer değişikliği sürecimde bu topluluğun desteğini hissetmek harikaydı. Liderlik atölyeleri sayesinde yeni rolüme çok daha hızlı ve özgüvenli adapte oldum.",
-    name: 'Ayşe T.',
-    role: 'Yazılım Geliştirici, Bursa',
-    initials: 'AT',
-    theme: 'crimson',
-  },
-  {
-    quote:
-      "Sadece profesyonel bir ağ değil, aynı zamanda güçlü bir dayanışma ortamı buldum. Kendi sektörümdeki diğer kadınların tecrübelerini dinlemek vizyonumu tamamen değiştirdi.",
-    name: 'Ceren B.',
-    role: 'İletişim Direktörü, Eskişehir',
-    initials: 'CB',
-    theme: 'forest',
-  },
 ];
 
 export interface Article {

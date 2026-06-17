@@ -1,6 +1,6 @@
 # KALBİM — Landing Page
 
-A faithful, production-ready reproduction of the **KALBİM — Kadın Liderliği ve Bilinçlendirme Merkezi** landing page, built with **Next.js 15 (App Router)**, **TypeScript**, and **Tailwind CSS**.
+A faithful, production-ready **multi-page** site for **KALBİM — Kadın Liderliği ve Bilinçlendirme Merkezi**, built with **Next.js 15 (App Router)**, **TypeScript**, and **Tailwind CSS**. Includes the landing page plus Hakkımızda, Programlar, Topluluk, Blog and İletişim pages, all sharing one design system and a purple brand palette.
 
 ## ✨ Highlights
 
@@ -107,3 +107,76 @@ All text and structured data live in **`lib/content.ts`** — update copy, stats
 ---
 
 © 2025 KALBİM — Kadın Liderliği ve Bilinçlendirme Merkezi Derneği. Built as a front-end reproduction.
+
+## 🗂️ Pages / Routes
+
+| Route          | Page         | Highlights                                                                 |
+| -------------- | ------------ | -------------------------------------------------------------------------- |
+| `/`            | Ana sayfa    | Hero, impact, programs, circles, testimonials, blog teaser, CTA            |
+| `/hakkimizda`  | Hakkımızda   | Mission/vision, values, 2022→2025 timeline, impact stats, team grid        |
+| `/programlar`  | Programlar   | Program cards, per-program detail breakdown, FAQ accordion                 |
+| `/topluluk`    | Topluluk     | Community circles, “how it works” steps, upcoming events, testimonials     |
+| `/blog`        | Blog         | Featured resource, **filterable** post grid, newsletter signup            |
+| `/iletisim`    | İletişim     | Validated contact form, contact channels, office card, FAQ                 |
+
+`Header`, `Footer`, the skip-link and `Organization` JSON-LD live in `app/layout.tsx`, so every route shares them automatically. The active nav item is highlighted via `usePathname()`.
+
+### Interactive client components
+- `components/sections/FaqAccordion.tsx` — accessible expand/collapse (`aria-expanded`).
+- `components/sections/BlogGrid.tsx` — category tabs that filter posts client-side.
+- `components/sections/ContactForm.tsx` — inline validation, success state (wire to your API where marked).
+- `components/sections/Newsletter.tsx` — email capture with validation.
+
+## 🎨 Color Palette (purple brand)
+
+Defined as tokens in `tailwind.config.ts` — change them in one place to re-theme the whole site.
+
+| Token (Tailwind)        | Hex       | Role                                  |
+| ----------------------- | --------- | ------------------------------------- |
+| `crimson` (primary)     | `#92298E` | Neon pink — accents, buttons, card 1  |
+| `forest` (secondary)    | `#BE8FC0` | Matte lavender — card 2, avatars      |
+| `gold` (tertiary)       | `#A7A5A7` | Gray — card 3, muted UI               |
+| `ink`                   | `#515152` | Dark grey — headings, “Canlı” badge   |
+| `muted`                 | `#A7A5A7` | Gray — secondary text                 |
+| `cream` / `100` / `200` | `#FEFEFE` / `#F7F5F8` / `#EEECEF` | White + light gray-lavender bands |
+| `blush`                 | `#EAD9EC` | Soft lavender — featured surfaces     |
+| `lilac`                 | `#CDB0CE` | Light lavender accent                 |
+
+> The token names (`crimson`, `forest`, `gold`) are historical; their **values** now hold the purple palette, so every component recolors consistently.
+
+## 🔁 Re-theming
+
+To shift the whole palette, edit the `colors` block in `tailwind.config.ts`. Because all components reference tokens (never raw hex), the entire multi-page site updates at once. The only inline hex values are inside the decorative SVGs (`HeroIllustration.tsx`, `Blog.tsx`, `BlogGrid.tsx`, `Circles.tsx`) — search for them if you want to fine-tune the illustrations.
+
+## 🧩 Directus (headless CMS)
+
+Blog **posts** + **categories** and site **globals** (email, phone, address,
+social links, footer text) are served from a self-hosted Directus instance.
+All content collections are scoped to a `kalbim` site record via a `site`
+relation, so one Directus can host multiple sites later.
+
+- Self-host stack, schema bootstrap script, and full setup steps:
+  see **[`directus/README.md`](./directus/README.md)**.
+- Next.js side: typed client + data layer in `lib/directus.ts`
+  (`getPosts`, `getPostBySlug`, `getCategories`, `getGlobals`, `assetUrl`),
+  schema types in `lib/directus-types.ts`.
+- Pages use **ISR** (`revalidate = 60`); `POST /api/revalidate` enables
+  instant publishing via a Directus Flow webhook.
+- Required env (see `.env.example`): `DIRECTUS_URL`, optional `DIRECTUS_TOKEN`,
+  `DIRECTUS_SITE`, `REVALIDATE_SECRET`.
+
+**Builds without a CMS:** all Directus calls fall back gracefully (empty states,
+hardcoded defaults), so `npm run build` succeeds even before Directus is reachable.
+
+### Quick start
+```bash
+# 1) Run Directus on your VPS
+cd directus && cp .env.example .env   # edit secrets
+docker compose up -d
+
+# 2) Create schema + seed (from project root)
+DIRECTUS_URL=https://cms.kalbim.org ADMIN_EMAIL=... ADMIN_PASSWORD=... \
+  node directus/bootstrap.mjs
+
+# 3) Grant Public read (or set DIRECTUS_TOKEN), point the site env at Directus, redeploy
+```

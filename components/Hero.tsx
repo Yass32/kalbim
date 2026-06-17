@@ -67,7 +67,7 @@ export function Hero() {
                 Canlı atölye: 18:30
               </div>
 
-              {/* New members card*/}
+              {/* New members card */}
               <div className="absolute bottom-4 left-4 right-4 inline-flex items-center gap-3 rounded-2xl bg-cream/90 px-3.5 py-2.5 shadow-[0_18px_40px_-20px_rgba(28,16,36,0.45)] ring-1 ring-ink/[0.04] backdrop-blur-sm sm:left-5 sm:w-auto sm:max-w-[260px]">
                 <div className="flex -space-x-2.5">
                   {avatarThemes.map((a) => (

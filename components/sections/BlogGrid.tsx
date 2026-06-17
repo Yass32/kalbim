@@ -1,7 +1,9 @@
 'use client';
 
+import Image from 'next/image';
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { blogCategories, blogPosts } from '@/lib/content';
+import type { PostCard } from '@/lib/directus-types';
 import { cn } from '@/lib/utils';
 
 function CirclesArt() {
@@ -24,19 +26,32 @@ function SquaresArt() {
   );
 }
 
-export function BlogGrid() {
+interface BlogGridProps {
+  posts: PostCard[];
+  categories: string[];
+}
+
+export function BlogGrid({ posts, categories }: BlogGridProps) {
+  const tabs = useMemo(() => ['Tümü', ...categories], [categories]);
   const [active, setActive] = useState<string>('Tümü');
 
   const filtered = useMemo(() => {
-    if (active === 'Tümü') return blogPosts;
-    return blogPosts.filter((p) => p.tag.toLowerCase() === active.toLocaleLowerCase('tr'));
-  }, [active]);
+    if (active === 'Tümü') return posts;
+    return posts.filter((p) => p.tag === active.toLocaleUpperCase('tr'));
+  }, [active, posts]);
+
+  if (posts.length === 0) {
+    return (
+      <p className="rounded-2xl bg-cream-100 p-10 text-center text-muted ring-1 ring-ink/[0.05]">
+        Henüz yayımlanmış bir yazı yok. İçerikler Directus üzerinden eklendiğinde burada görünecek.
+      </p>
+    );
+  }
 
   return (
     <div>
-      {/* Category filter */}
       <div className="flex flex-wrap gap-2.5" role="tablist" aria-label="Kategoriler">
-        {blogCategories.map((cat) => {
+        {tabs.map((cat) => {
           const isActive = active === cat;
           return (
             <button
@@ -58,16 +73,25 @@ export function BlogGrid() {
         })}
       </div>
 
-      {/* Grid */}
       <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((post) => (
-          <article key={post.title}>
-            <a
-              href="/blog"
+        {filtered.map((post, i) => (
+          <article key={post.slug}>
+            <Link
+              href={`/blog/${post.slug}`}
               className="group flex h-full flex-col overflow-hidden rounded-[1.5rem] bg-cream ring-1 ring-ink/[0.05] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_48px_-30px_rgba(81,81,82,0.4)]"
             >
-              <div className="aspect-[2/1] bg-cream-100 p-4">
-                {post.variant === 'circles' ? <CirclesArt /> : <SquaresArt />}
+              <div className="relative aspect-[2/1] overflow-hidden bg-cream-100">
+                {post.coverUrl ? (
+                  <Image
+                    src={post.coverUrl}
+                    alt={post.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="p-4">{i % 2 === 0 ? <CirclesArt /> : <SquaresArt />}</div>
+                )}
               </div>
               <div className="flex flex-1 flex-col p-6">
                 <span className="inline-flex w-fit rounded-full bg-crimson/10 px-2.5 py-1 text-[0.66rem] font-bold uppercase tracking-wider text-crimson">
@@ -77,10 +101,10 @@ export function BlogGrid() {
                   {post.title}
                 </h3>
                 <p className="mt-auto pt-5 text-[0.8rem] text-muted">
-                  {post.date} · {post.readTime}
+                  {[post.date, post.readTime].filter(Boolean).join(' · ')}
                 </p>
               </div>
-            </a>
+            </Link>
           </article>
         ))}
       </div>

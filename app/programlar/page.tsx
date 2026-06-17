@@ -85,7 +85,7 @@ export default function ProgramlarPage() {
         </Container>
       </section>
 
-      {/* FAQ 
+      {/* FAQ */}
       <section className="py-16 sm:py-20 lg:py-24">
         <Container>
           <Reveal className="text-center">
@@ -97,7 +97,6 @@ export default function ProgramlarPage() {
           </div>
         </Container>
       </section>
-      */}
 
       <CTA />
     </main>

@@ -10,10 +10,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@directus/sdk": "^19.1.0",
     "@fontsource/plus-jakarta-sans": "^5.2.8",
-    "next": "^15.5.19",
+    "next": "15.1.6",
     "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "react-dom": "19.0.0",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@types/node": "^20.17.16",

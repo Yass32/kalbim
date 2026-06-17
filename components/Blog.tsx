@@ -1,8 +1,10 @@
+import Image from 'next/image';
+import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Reveal } from '@/components/ui/Reveal';
 import { Button } from '@/components/ui/Button';
 import { ArrowRight } from '@/components/icons';
-import { articles } from '@/lib/content';
+import type { PostCard } from '@/lib/directus-types';
 
 function CirclesArt() {
   return (
@@ -24,7 +26,7 @@ function SquaresArt() {
   );
 }
 
-export function Blog() {
+export function Blog({ posts = [] }: { posts?: PostCard[] }) {
   return (
     <section id="blog" className="bg-cream-200 py-16 sm:py-20 lg:py-24">
       <Container>
@@ -44,7 +46,7 @@ export function Blog() {
         </div>
 
         <div className="mt-12 grid gap-6 lg:grid-cols-2">
-          {/* Featured resource */}
+          {/* Featured resource (static promo) */}
           <Reveal as="article">
             <div className="relative flex h-full flex-col overflow-hidden rounded-[1.5rem] bg-blush p-8 text-ink">
               <span className="pointer-events-none absolute -right-6 top-8 h-36 w-36 rounded-full border-2 border-dashed border-crimson/40">
@@ -66,42 +68,58 @@ export function Blog() {
                   <span>PDF · 28 sayfa</span>
                   <span>· Türkçe</span>
                 </p>
-                <a
+                <Link
                   href="/blog"
                   className="inline-flex items-center gap-2 rounded-full bg-crimson px-5 py-2.5 text-[0.88rem] font-semibold text-cream transition-transform hover:-translate-y-0.5"
                 >
                   İndir
                   <ArrowRight className="h-4 w-4" />
-                </a>
+                </Link>
               </div>
             </div>
           </Reveal>
 
-          {/* Two article cards */}
+          {/* Latest posts from Directus */}
           <div className="grid gap-6 sm:grid-cols-2">
-            {articles.map((article, i) => (
-              <Reveal as="article" key={article.title} delay={i * 110}>
-                <a
-                  href="/blog"
-                  className="group flex h-full flex-col overflow-hidden rounded-[1.5rem] bg-cream ring-1 ring-ink/[0.05] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_48px_-30px_rgba(28,16,36,0.4)]"
+            {posts.slice(0, 2).map((post, i) => (
+              <Reveal as="article" key={post.slug} delay={i * 110}>
+                <Link
+                  href={`/blog/${post.slug}`}
+                  className="group flex h-full flex-col overflow-hidden rounded-[1.5rem] bg-cream ring-1 ring-ink/[0.05] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_48px_-30px_rgba(81,81,82,0.4)]"
                 >
-                  <div className="aspect-[2/1] bg-cream-100 p-4">
-                    {article.variant === 'circles' ? <CirclesArt /> : <SquaresArt />}
+                  <div className="relative aspect-[2/1] overflow-hidden bg-cream-100">
+                    {post.coverUrl ? (
+                      <Image
+                        src={post.coverUrl}
+                        alt={post.title}
+                        fill
+                        sizes="(max-width: 1024px) 50vw, 25vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="p-4">{i % 2 === 0 ? <CirclesArt /> : <SquaresArt />}</div>
+                    )}
                   </div>
                   <div className="flex flex-1 flex-col p-6">
                     <span className="inline-flex w-fit rounded-full bg-crimson/10 px-2.5 py-1 text-[0.66rem] font-bold uppercase tracking-wider text-crimson">
-                      {article.tag}
+                      {post.tag}
                     </span>
                     <h3 className="mt-4 text-lg font-bold leading-snug text-ink transition-colors group-hover:text-crimson">
-                      {article.title}
+                      {post.title}
                     </h3>
                     <p className="mt-auto pt-5 text-[0.8rem] text-muted">
-                      {article.date} · {article.readTime}
+                      {[post.date, post.readTime].filter(Boolean).join(' · ')}
                     </p>
                   </div>
-                </a>
+                </Link>
               </Reveal>
             ))}
+
+            {posts.length === 0 && (
+              <div className="sm:col-span-2 grid place-items-center rounded-[1.5rem] bg-cream p-10 text-center text-sm text-muted ring-1 ring-ink/[0.05]">
+                Yazılar Directus&apos;tan eklendiğinde burada görünecek.
+              </div>
+            )}
           </div>
         </div>
       </Container>

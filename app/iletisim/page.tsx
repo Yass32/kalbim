@@ -5,7 +5,8 @@ import { PageHeader } from '@/components/PageHeader';
 import { ContactForm } from '@/components/sections/ContactForm';
 import { FaqAccordion } from '@/components/sections/FaqAccordion';
 import { InstagramIcon, LinkedInIcon, XIcon } from '@/components/icons';
-import { contactChannels, faq } from '@/lib/content';
+import { contactChannels as fallbackChannels, faq } from '@/lib/content';
+import { getGlobals } from '@/lib/directus';
 
 export const metadata: Metadata = {
   title: 'İletişim',
@@ -14,13 +15,31 @@ export const metadata: Metadata = {
   alternates: { canonical: '/iletisim' },
 };
 
-const socials = [
-  { label: 'Instagram', Icon: InstagramIcon, bg: 'bg-crimson' },
-  { label: 'LinkedIn', Icon: LinkedInIcon, bg: 'bg-ink' },
-  { label: 'X', Icon: XIcon, bg: 'bg-forest' },
-];
+export const revalidate = 60;
 
-export default function IletisimPage() {
+export default async function IletisimPage() {
+  const globals = await getGlobals();
+
+  const channels = globals
+    ? [
+        globals.email && { label: 'E-posta', value: globals.email, href: `mailto:${globals.email}` },
+        globals.phone && {
+          label: 'Telefon',
+          value: globals.phone,
+          href: `tel:${globals.phone.replace(/\s+/g, '')}`,
+        },
+        globals.address && { label: 'Adres', value: globals.address, href: '#' },
+      ].filter(Boolean) as { label: string; value: string; href: string }[]
+    : [...fallbackChannels];
+
+  const socials = [
+    { label: 'Instagram', Icon: InstagramIcon, bg: 'bg-crimson', href: globals?.instagram_url ?? '#' },
+    { label: 'LinkedIn', Icon: LinkedInIcon, bg: 'bg-ink', href: globals?.linkedin_url ?? '#' },
+    { label: 'X', Icon: XIcon, bg: 'bg-forest', href: globals?.x_url ?? '#' },
+  ];
+
+  const officeAddress = globals?.address ?? 'Maslak Mah. No:1, Sarıyer / İstanbul';
+
   return (
     <main id="main">
       <PageHeader
@@ -32,7 +51,6 @@ export default function IletisimPage() {
       <section className="py-16 sm:py-20 lg:py-24">
         <Container>
           <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
-            {/* Form */}
             <Reveal>
               <div className="rounded-[1.5rem] bg-cream-100 p-7 ring-1 ring-ink/[0.05] sm:p-9">
                 <h2 className="heading-xl text-2xl text-ink sm:text-3xl">Bize yaz</h2>
@@ -43,13 +61,12 @@ export default function IletisimPage() {
               </div>
             </Reveal>
 
-            {/* Channels */}
             <Reveal delay={120}>
               <div className="space-y-6">
                 <div className="rounded-[1.5rem] bg-cream-200 p-7 ring-1 ring-ink/[0.05]">
                   <h3 className="text-lg font-bold text-ink">İletişim kanalları</h3>
                   <ul className="mt-5 space-y-4">
-                    {contactChannels.map((c) => (
+                    {channels.map((c) => (
                       <li key={c.label}>
                         <p className="text-[0.78rem] font-semibold uppercase tracking-wider text-muted">
                           {c.label}
@@ -71,10 +88,12 @@ export default function IletisimPage() {
                     Etkinlikler, yeni yazılar ve topluluk haberleri için sosyal medyada bize katıl.
                   </p>
                   <ul className="mt-5 flex gap-3">
-                    {socials.map(({ label, Icon, bg }) => (
+                    {socials.map(({ label, Icon, bg, href }) => (
                       <li key={label}>
                         <a
-                          href="#"
+                          href={href}
+                          target={href.startsWith('http') ? '_blank' : undefined}
+                          rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
                           aria-label={label}
                           className={`grid h-11 w-11 place-items-center rounded-xl ${bg} text-cream ring-1 ring-cream/30 transition-transform hover:-translate-y-0.5`}
                         >
@@ -88,7 +107,7 @@ export default function IletisimPage() {
                 <div className="rounded-[1.5rem] bg-cream-100 p-7 ring-1 ring-ink/[0.05]">
                   <h3 className="text-lg font-bold text-ink">Ofis</h3>
                   <p className="mt-2 text-[0.95rem] leading-relaxed text-muted">
-                    Maslak Mah. No:1, Sarıyer / İstanbul
+                    {officeAddress}
                     <br />
                     Hafta içi 09:00 – 18:00
                   </p>
@@ -106,7 +125,6 @@ export default function IletisimPage() {
         </Container>
       </section>
 
-      {/* FAQ */}
       <section id="sss" className="bg-cream-200 py-16 sm:py-20 lg:py-24">
         <Container>
           <Reveal className="text-center">

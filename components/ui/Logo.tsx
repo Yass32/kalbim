@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import Image from 'next/image';
 import { HeartShield } from '@/components/icons';
-
+import Image from 'next/image';
 
 interface LogoProps {
   className?: string;
