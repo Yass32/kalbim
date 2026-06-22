@@ -4,13 +4,12 @@ import {
   rest,
   staticToken,
   readItems,
+  readSingleton,
 } from '@directus/sdk';
 import type { Schema, Globals, Category, Post, PostCard } from './directus-types';
 
 const DIRECTUS_URL = process.env.DIRECTUS_URL?.replace(/\/$/, '');
 const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN;
-// Which `kalbim` site record this deployment reads (by slug).
-const SITE_SLUG = process.env.DIRECTUS_SITE ?? 'kalbim';
 
 /**
  * Singleton Directus client.
@@ -38,8 +37,6 @@ async function safe<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
   }
 }
 
-const siteFilter = { site: { slug: { _eq: SITE_SLUG } } } as const;
-
 /** Build a public asset URL for a Directus file id, with optional transforms. */
 export function assetUrl(
   fileId: string | null | undefined,
@@ -60,25 +57,18 @@ export function assetUrl(
 export async function getGlobals(): Promise<Globals | null> {
   const client = getClient();
   if (!client) return null;
-  return safe(async () => {
-    const rows = await client.request(
-      readItems('globals', {
-        filter: siteFilter,
-        limit: 1,
-        fields: [
-          'id',
-          'email',
-          'phone',
-          'address',
-          'instagram_url',
-          'linkedin_url',
-          'x_url',
-          'footer_description',
-        ],
-      })
-    );
-    return (rows[0] as Globals) ?? null;
-  }, null);
+  return safe(
+    () =>
+      client.request(
+        readSingleton('globals', {
+          fields: [
+            'id', 'email', 'phone', 'address',
+            'instagram_url', 'linkedin_url', 'x_url', 'footer_description',
+          ],
+        })
+      ) as Promise<Globals>,
+    null
+  );
 }
 
 // ────────────────────────────── Categories ─────────────────────────────
@@ -90,7 +80,6 @@ export async function getCategories(): Promise<Category[]> {
     () =>
       client.request(
         readItems('categories', {
-          filter: siteFilter,
           sort: ['sort', 'name'],
           fields: ['id', 'name', 'slug', 'sort'],
           limit: -1,
@@ -121,7 +110,6 @@ export async function getPosts(): Promise<Post[]> {
     async () =>
       (await client.request(
         readItems('posts', {
-          filter: siteFilter,
           sort: ['-published_at'],
           fields: POST_FIELDS,
           limit: -1,
@@ -138,7 +126,6 @@ export async function getLatestPosts(count = 2): Promise<Post[]> {
     async () =>
       (await client.request(
         readItems('posts', {
-          filter: siteFilter,
           sort: ['-published_at'],
           fields: POST_FIELDS,
           limit: count,
@@ -154,7 +141,6 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   return safe(async () => {
     const rows = (await client.request(
       readItems('posts', {
-        filter: { ...siteFilter, slug: { _eq: slug } },
         limit: 1,
         fields: POST_FIELDS,
       })
@@ -168,7 +154,7 @@ export async function getPostSlugs(): Promise<string[]> {
   if (!client) return [];
   return safe(async () => {
     const rows = (await client.request(
-      readItems('posts', { filter: siteFilter, fields: ['slug'], limit: -1 })
+      readItems('posts')
     )) as Array<{ slug: string }>;
     return rows.map((r) => r.slug);
   }, []);

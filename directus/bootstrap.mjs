@@ -26,9 +26,11 @@ import {
   createItem,
   createItems,
   readItems,
+  readSingleton,
+  updateSingleton,
 } from '@directus/sdk';
 
-const URL = process.env.DIRECTUS_URL || 'http://localhost:8055';
+const URL = process.env.DIRECTUS_URL;
 const EMAIL = process.env.ADMIN_EMAIL;
 const PASSWORD = process.env.ADMIN_PASSWORD;
 
@@ -92,21 +94,12 @@ async function main() {
 
   // ── Collections ─────────────────────────────────────────────
   console.log('\nCollections');
-  await attempt('collection kalbim', () =>
-    client.request(
-      createCollection({
-        collection: 'kalbim',
-        meta: { icon: 'public', note: 'Sites (one record per site)' },
-        schema: { name: 'kalbim' },
-        fields: [pk],
-      })
-    )
-  );
+
   await attempt('collection globals', () =>
     client.request(
       createCollection({
         collection: 'globals',
-        meta: { icon: 'settings', note: 'Per-site global settings' },
+        meta: { icon: 'settings', singleton: true, note: 'Site-wide settings' },
         schema: { name: 'globals' },
         fields: [pk],
       })
@@ -133,14 +126,8 @@ async function main() {
     )
   );
 
-  // ── Fields: kalbim ──────────────────────────────────────────
-  console.log('\nFields: kalbim');
-  await field('kalbim', { field: 'name', type: 'string', meta: { interface: 'input' } });
-  await field('kalbim', { field: 'slug', type: 'string', schema: { is_unique: true }, meta: { interface: 'input' } });
-
   // ── Fields: globals ─────────────────────────────────────────
   console.log('\nFields: globals');
-  await m2o('globals', 'site', 'kalbim');
   await field('globals', { field: 'email', type: 'string', meta: { interface: 'input', options: { iconLeft: 'mail' } } });
   await field('globals', { field: 'phone', type: 'string', meta: { interface: 'input', options: { iconLeft: 'call' } } });
   await field('globals', { field: 'address', type: 'text', meta: { interface: 'input-multiline' } });
@@ -151,14 +138,12 @@ async function main() {
 
   // ── Fields: categories ──────────────────────────────────────
   console.log('\nFields: categories');
-  await m2o('categories', 'site', 'kalbim');
   await field('categories', { field: 'name', type: 'string', meta: { interface: 'input' } });
   await field('categories', { field: 'slug', type: 'string', meta: { interface: 'input' } });
   await field('categories', { field: 'sort', type: 'integer', meta: { interface: 'input', hidden: false } });
 
   // ── Fields: posts ───────────────────────────────────────────
   console.log('\nFields: posts');
-  await m2o('posts', 'site', 'kalbim');
   await field('posts', { field: 'title', type: 'string', meta: { interface: 'input' } });
   await field('posts', { field: 'slug', type: 'string', meta: { interface: 'input', note: 'URL: /blog/<slug>' } });
   await field('posts', { field: 'excerpt', type: 'text', meta: { interface: 'input-multiline' } });
@@ -170,22 +155,10 @@ async function main() {
 
   // ── Seed ────────────────────────────────────────────────────
   console.log('\nSeed');
-  let siteId;
-  const existingSite = await client.request(readItems('kalbim', { filter: { slug: { _eq: 'kalbim' } }, limit: 1 }));
-  if (existingSite[0]) {
-    siteId = existingSite[0].id;
-    console.log('  • site "kalbim" already exists');
-  } else {
-    const site = await client.request(createItem('kalbim', { name: 'KALBİM', slug: 'kalbim' }));
-    siteId = site.id;
-    ok('site "kalbim"');
-  }
 
-  const existingGlobals = await client.request(readItems('globals', { filter: { site: { _eq: siteId } }, limit: 1 }));
-  if (!existingGlobals[0]) {
+  try {
     await client.request(
-      createItem('globals', {
-        site: siteId,
+      updateSingleton('globals', {
         email: 'merhaba@kalbim.org',
         phone: '+90 212 000 00 00',
         address: 'Maslak Mah. No:1, Sarıyer / İstanbul',
@@ -197,8 +170,10 @@ async function main() {
       })
     );
     ok('globals');
-  } else {
-    console.log('  • globals already exist');
+  } catch (err) {
+    const msg = err?.errors?.[0]?.message || err?.message || String(err);
+    if (/exist|unique|duplicate/i.test(msg)) console.log('  • globals already present');
+    else console.warn(`  ! globals: ${msg}`);
   }
 
   const categoryDefs = [
@@ -209,9 +184,9 @@ async function main() {
     { name: 'Finans', slug: 'finans', sort: 5 },
   ];
   const catMap = {};
-  const existingCats = await client.request(readItems('categories', { filter: { site: { _eq: siteId } }, limit: -1 }));
+  const existingCats = await client.request(readItems('categories'));
   for (const ec of existingCats) catMap[ec.slug] = ec.id;
-  const toCreate = categoryDefs.filter((c) => !catMap[c.slug]).map((c) => ({ ...c, site: siteId }));
+  const toCreate = categoryDefs.filter((c) => !catMap[c.slug]).map((c) => ({ ...c}));
   if (toCreate.length) {
     const created = await client.request(createItems('categories', toCreate));
     for (const c of created) catMap[c.slug] = c.id;
@@ -220,7 +195,7 @@ async function main() {
     console.log('  • categories already exist');
   }
 
-  const existingPosts = await client.request(readItems('posts', { filter: { site: { _eq: siteId } }, limit: 1 }));
+  const existingPosts = await client.request(readItems('posts', { limit: 1 }));
   if (!existingPosts[0]) {
     const body = (p) => `<p>${p}</p><p>Bu yazı KALBİM topluluğundan deneyimlerle hazırlandı. Daha fazlası için topluluğa katılabilirsin.</p>`;
     const posts = [
@@ -236,7 +211,6 @@ async function main() {
       createItems(
         'posts',
         posts.map((p) => ({
-          site: siteId,
           title: p.title,
           slug: p.slug,
           excerpt: p.excerpt,
@@ -258,6 +232,9 @@ async function main() {
 }
 
 main().catch((e) => {
+  console.log(URL, EMAIL, PASSWORD)
+  console.error(JSON.stringify(e, null, 2));
   console.error('\nBootstrap failed:', e?.errors?.[0]?.message || e?.message || e);
   process.exit(1);
 });
+

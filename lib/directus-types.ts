@@ -1,15 +1,7 @@
 // TypeScript shape of the Directus schema for the KALBİM site.
-// Every content collection is scoped to a `kalbim` (site) record via a `site` M2O.
-
-export interface KalbimSite {
-  id: number;
-  name: string;
-  slug: string;
-}
 
 export interface Globals {
   id: number;
-  site: number | KalbimSite;
   email: string | null;
   phone: string | null;
   address: string | null;
@@ -21,7 +13,6 @@ export interface Globals {
 
 export interface Category {
   id: number;
-  site: number | KalbimSite;
   name: string;
   slug: string;
   sort: number | null;
@@ -29,7 +20,6 @@ export interface Category {
 
 export interface Post {
   id: number;
-  site: number | KalbimSite;
   title: string;
   slug: string;
   excerpt: string | null;
@@ -43,8 +33,7 @@ export interface Post {
 
 // Full schema map consumed by the Directus SDK generic.
 export interface Schema {
-  kalbim: KalbimSite[];
-  globals: Globals[];
+  globals: Globals;          
   categories: Category[];
   posts: Post[];
 }
