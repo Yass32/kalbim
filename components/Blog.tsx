@@ -117,7 +117,7 @@ export function Blog({ posts = [] }: { posts?: PostCard[] }) {
 
             {posts.length === 0 && (
               <div className="sm:col-span-2 grid place-items-center rounded-[1.5rem] bg-cream p-10 text-center text-sm text-muted ring-1 ring-ink/[0.05]">
-                Yazılar Directus&apos;tan eklendiğinde burada görünecek.
+                Son yazılar burada yayınlanacaktır.
               </div>
             )}
           </div>
