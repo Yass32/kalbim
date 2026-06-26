@@ -65,7 +65,7 @@ export function Blog({ posts = [] }: { posts?: PostCard[] }) {
               </p>
               <div className="relative mt-auto flex items-end justify-between gap-4 pt-10">
                 <p className="flex flex-wrap gap-x-4 text-[0.82rem] text-ink/70">
-                  <span>PDF · 28 sayfa</span>
+                  <span>PDF · 28 sayfalar</span>
                   <span>· Türkçe</span>
                 </p>
                 <Link
