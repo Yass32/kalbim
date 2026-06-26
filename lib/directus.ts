@@ -141,6 +141,11 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   return safe(async () => {
     const rows = (await client.request(
       readItems('posts', {
+        filter: {
+          slug: {
+            _eq: slug,
+          },
+        },
         limit: 1,
         fields: POST_FIELDS,
       })
